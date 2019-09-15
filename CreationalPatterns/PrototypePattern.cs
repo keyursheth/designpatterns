@@ -1,27 +1,29 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DeepAndShallowCopy
+namespace CreationalPatterns
 {
-    class Program
+    class PrototypePattern
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine(Environment.NewLine);
 
             Company c1 = new Company(1, "company 1", 400064, "Mumbai");
             //Company c2 = c1;
-            //Company c2 = c1.MakeShallowCopy() as Company;
-            Company c2 = c1.MakeDeepCopy() as Company;            
+            //Company c2 = c1.MakeShallowCopy();
+            //Company c2 = c1.MakeDeepCopy();
+            Company c2 = c1.MakeDeepCopyBySerialization();
 
-            
-            c2.CompanyID = 2;
-            c2.CompanyName = "company 2";
-            c2.CompanyAddress.Pincode = 123456;
-            c2.CompanyAddress.City = "Pune";
-            c2.EmpIds.Add(4);
-            c2.EmpNames.Add("vivaan");
+
+            c1.CompanyID = 2;
+            c1.CompanyName = "company 2";
+            c1.CompanyAddress.Pincode = 123456;
+            c1.CompanyAddress.City = "Pune";
+            c1.EmpIds.Add(4);
+            c1.EmpNames.Add("vivaan");
 
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("After modifications");
@@ -58,12 +60,12 @@ namespace DeepAndShallowCopy
         public List<int> EmpIds;
         public List<string> EmpNames;
 
-        public object MakeShallowCopy()
+        public Company MakeShallowCopy()
         {
-            return this.MemberwiseClone();
+            return this.MemberwiseClone() as Company;
         }
 
-        public object MakeDeepCopy()
+        public Company MakeDeepCopy()
         {
             Company c2 = this.MemberwiseClone() as Company;
             c2.EmpIds = new List<int>();
@@ -75,6 +77,13 @@ namespace DeepAndShallowCopy
             return c2;
         }
 
+        public Company MakeDeepCopyBySerialization()
+        {
+            Company c1 = this;
+            Company clone = JsonConvert.DeserializeObject<Company>(JsonConvert.SerializeObject(c1));
+            return clone;
+        }
+
         public void PrintDetails()
         {
             Console.WriteLine("Company ID : " + this.CompanyID);
@@ -83,7 +92,7 @@ namespace DeepAndShallowCopy
             Console.WriteLine("Company City : " + this.CompanyAddress.City);
             Console.WriteLine("Company Employee Id's : " + this.EmpIds.ListValuesToString());
             Console.WriteLine("Company Employee Name's : " + this.EmpNames.ListValuesToString());
-        }        
+        }
     }
 
     class Address
