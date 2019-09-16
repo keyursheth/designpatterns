@@ -9,9 +9,12 @@ namespace CreationalPatterns
         public static void Main()
         {
             Console.WriteLine("Testing Factory Method Pattern");
-            TestFactoryMethodPattern(new GroundTransport());
+
+            TestFactoryMethodPattern(new GroundTransportCreator());
             Console.WriteLine(Environment.NewLine);
-            TestFactoryMethodPattern(new WaterTransport());
+
+            TestFactoryMethodPattern(new WaterTransportCreator());
+
             Console.ReadLine();
         }
 
@@ -55,7 +58,7 @@ namespace CreationalPatterns
         }
     }
 
-    public class GroundTransport : TransportCreator
+    public class GroundTransportCreator : TransportCreator
     {
         public override ITransportVehicle GetTransportVehicleFactoryMethod()
         {
@@ -63,7 +66,7 @@ namespace CreationalPatterns
         }
     }
 
-    public class WaterTransport : TransportCreator
+    public class WaterTransportCreator : TransportCreator
     {
         public override ITransportVehicle GetTransportVehicleFactoryMethod()
         {
